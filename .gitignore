@@ -16,3 +16,6 @@
 *.zip
 *.tar.gz
 *.rar
+/image-storage/target/
+/tesis-rgb/target/
+/test-manager/target/

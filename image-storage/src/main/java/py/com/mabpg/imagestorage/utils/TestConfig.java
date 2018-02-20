@@ -46,7 +46,7 @@ public class TestConfig {
     public String RESTORED_PATH_SUFFIX = "/restored";
     public String EXTENSION = "jpg";
     public String EXTENSION_GRAY = "BMP";
-    public int TAMAÃ‘O_VENTANA = 5;
+    public int TAMAÑO_VENTANA = 5;
     
     public int ALPHA = 10;
             
