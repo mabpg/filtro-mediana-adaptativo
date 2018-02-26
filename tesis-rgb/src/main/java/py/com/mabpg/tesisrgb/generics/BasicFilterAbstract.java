@@ -5,6 +5,7 @@
  */
 package py.com.mabpg.tesisrgb.generics;
 
+import py.com.mabpg.tesisrgb.models.FormulaPesos2;
 import ij.ImagePlus;
 import ij.io.FileSaver;
 import ij.process.ByteProcessor;
@@ -37,6 +38,8 @@ public abstract class BasicFilterAbstract {
     
     public Pixel[] se;
     
+    public FormulaPesos2 dist;
+    
     public String [] components = {"R", "G", "B"};
     //defaultOrder
     public int[] componentsOrder = {0, 1, 2};
@@ -56,6 +59,7 @@ public abstract class BasicFilterAbstract {
         
         this.filter = filter;
         this.se = se;
+        this.dist = new FormulaPesos2();
         this.rgbImage = rgbImage;
         this.restoredColProcessor = new ColorProcessor(rgbImage.getWidth(), rgbImage.getHeight());
         this.noisyColProcessor = rgbImage.getColorProcessor();
@@ -66,6 +70,66 @@ public abstract class BasicFilterAbstract {
     }
 
     public abstract void setWindowsList() throws Exception;
+    
+    /*Se hallan todas las distancias desde el elemento central de la máscara
+    o elemento estructurante a cada elemento, en las posiciones posibles dentro de*/
+    public void hallarDistancias(int posXcentral, int posYcentral) {                
+        dist.setPosXelemCentral(posXcentral);
+        dist.setPosYelemCentral(posYcentral);
+        int x, y;
+        double x1,y1;
+        int indice = 0;
+        int [] distancias = null;
+        for (Pixel sePixel : se) {
+            
+            x = posXcentral + sePixel.getX();
+            y = posYcentral + sePixel.getY();
+            
+            if (x > -1 && x < width && y > -1 && y < height) {
+                x1 = Math.pow(((double)posXcentral) - (double)((posXcentral - sePixel.getX())),2.0);
+                y1 = Math.pow(((double)posYcentral) - (double)((posXcentral - sePixel.getY())),2.0); 
+                distancias[indice] = (int)Math.sqrt(x1 + y1);
+            
+                dist.setDistancia(distancias);
+            }
+            
+        }
+    }
+    
+    
+    public List<PixelWeight> preOrder(Pixel p) {
+        int cLength = channels.length;
+        int x, y;
+        double t = 0.0;
+        int[] rgbColor;
+        List<PixelWeight> orderPixelWeight = new ArrayList<>();
+        PixelWeight pixelWeight;
+        int media = 0;
+
+        for (Pixel sePixel : se) {
+            x = p.getX() + sePixel.getX();
+            y = p.getY() + sePixel.getY();
+            //verificamos si esta en la ventana del elemento estructurante
+            if (x > -1 && x < width && y > -1 && y < height) {
+                rgbColor = new int[cLength];
+                for (int channel = 0; channel < cLength; channel++) {
+                    rgbColor[channel] = channels[channel].get(x, y);
+                    //t = t + weight[channel] * rgbColor[channel];
+                    t = t + rgbColor[channel];
+                }
+
+                pixelWeight = new PixelWeight(rgbColor, t/3);
+                orderPixelWeight.add(pixelWeight);
+                media = media + (int) pixelWeight.getWeight();
+                t = 0.0;
+            }
+        }
+        //logger.debug("orderPixelWeight={}", orderPixelWeight.toString());
+        
+        dist.setMedia(media);
+        
+      return orderPixelWeight;
+    }
 
     public int[] order(double[] weight, Pixel p) {
         int cLength = channels.length;
@@ -84,10 +148,11 @@ public abstract class BasicFilterAbstract {
                 rgbColor = new int[cLength];
                 for (int channel = 0; channel < cLength; channel++) {
                     rgbColor[channel] = channels[channel].get(x, y);
-                    t = t + weight[channel] * rgbColor[channel];
+                    //t = t + weight[channel] * rgbColor[channel];
+                    t = t + rgbColor[channel];
                 }
 
-                pixelWeight = new PixelWeight(rgbColor, t);
+                pixelWeight = new PixelWeight(rgbColor, t/3);
                 orderPixelWeight.add(pixelWeight);
                 t = 0.0;
             }
@@ -162,6 +227,8 @@ public abstract class BasicFilterAbstract {
             for (int x = 0; x < width; x++) {
                 pixel = new Pixel(x, y);
                 realWeight = getRealWeight(pixel);
+                hallarDistancias(x,y);
+                List<PixelWeight> prueba = preOrder(pixel);
                 elementP = order(realWeight, pixel);
                 restoredColProcessor.putPixel(x, y, elementP);
             }
