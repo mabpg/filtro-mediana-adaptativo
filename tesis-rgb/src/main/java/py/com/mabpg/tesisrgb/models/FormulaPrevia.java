@@ -5,13 +5,15 @@
  */
 package py.com.mabpg.tesisrgb.models;
 
+import java.util.List;
+
 /**
  *
  * @author belis
  */
-public class FormulaPesos2 {
+public class FormulaPrevia {
     
-    private int[] distancia;
+    private List<Double> distancia;
     
     private int posXelemCentral;
     
@@ -20,23 +22,20 @@ public class FormulaPesos2 {
     private int media;
     
     private int dsvStandar;
-
-    public FormulaPesos2() {
-    }
     
+    private double cteEscalamiento;
 
-    public FormulaPesos2(int[] distancia) {
-        this.distancia = distancia;
-    }    
+    public FormulaPrevia() {
+    }   
 
-    public int[] getDistancia() {
+    public List<Double> getDistancia() {
         return distancia;
     }
 
-    public void setDistancia(int[] distancia) {
+    public void setDistancia(List<Double> distancia) {
         this.distancia = distancia;
     }
-
+    
     public int getPosXelemCentral() {
         return posXelemCentral;
     }
@@ -68,5 +67,13 @@ public class FormulaPesos2 {
     public void setMedia(int media) {
         this.media = media;
     }
-       
+
+    public double getCteEscalamiento() {
+        return cteEscalamiento;
+    }
+
+    public void setCteEscalamiento(double cteEscalamiento) {
+        this.cteEscalamiento = cteEscalamiento;
+    }
+    
 }
