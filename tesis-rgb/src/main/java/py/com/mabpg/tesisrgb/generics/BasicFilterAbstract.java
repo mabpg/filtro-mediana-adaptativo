@@ -90,8 +90,8 @@ public abstract class BasicFilterAbstract {
             y = posYcentral + sePixel.getY();
             
             if (x > -1 && x < width && y > -1 && y < height) {
-                x1 = Math.pow(((double)posXcentral) - (double)(sePixel.getX()),2.0);
-                y1 = Math.pow(((double)posYcentral) - (double)(sePixel.getY()),2.0); 
+                x1 = Math.pow(((double)posXcentral) - (double)(x),2.0);   //OJO VOLVER A MIRAR ESTA PARTE
+                y1 = Math.pow(((double)posYcentral) - (double)(y),2.0); 
                 distancias.add(Math.sqrt(x1 + y1));
             }
         }
@@ -184,7 +184,7 @@ public abstract class BasicFilterAbstract {
        
     }
     
-    public int[] order(List<PixelWeight2> orderPixelWeight, Pixel p) {
+    public int[] order(List<PixelWeight2> orderPixelWeight) {
         int cLength = channels.length;
       
         int[] filterP;
@@ -225,9 +225,22 @@ public abstract class BasicFilterAbstract {
         for (PixelWeight2 elem : orderPixelWeight) {
             cantElementos = cantElementos + (int)elem.getWeight();
         }
-        int element = (int) Math.ceil(cantElementos / 2); //posicion mediana
-
-        return orderPixelWeight.get(element).getPixel();
+        int elementoMediana = (int) Math.ceil(cantElementos / 2); //posicion mediana
+        
+        int indice = 0;
+        
+        //retornamos la mediana, tomando en cuenta el peso de cada elemento
+        for (PixelWeight2 elem : orderPixelWeight) {
+            
+            for (int i = 0;i < elem.getWeight();i++) {
+                indice++;
+                
+                if(indice == elementoMediana) {
+                    return elem.getPixel();
+                }
+            }            
+        }
+        return null;
     }
 
     //solicitar tipo de filtro
@@ -254,7 +267,6 @@ public abstract class BasicFilterAbstract {
 
     public ColorProcessor run() throws Exception {
         int[] elementP;
-        double[] realWeight;
         Pixel pixel;
         long totalDecisiones = 0;
         setWindowsList();
@@ -263,11 +275,11 @@ public abstract class BasicFilterAbstract {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 pixel = new Pixel(x, y);
-                realWeight = getRealWeight(pixel);
+                //realWeight = getRealWeight(pixel);
                 hallarDistancias(x,y);
                 List<PixelWeight2> prueba = preOrder(pixel);
                 hallarPesos(prueba);
-                elementP = order(prueba, pixel);
+                elementP = order(prueba);
                 restoredColProcessor.putPixel(x, y, elementP);
             }
         }
