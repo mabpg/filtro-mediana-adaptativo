@@ -10,7 +10,7 @@ import java.util.Comparator;
  *
  * @author daasalbion
  */
-public class TesisComparator implements Comparator<PixelWeight>{
+public class TesisComparator implements Comparator<PixelWeight2>{
     
     //cantidad de veces que se opta por canal
     public long [] chooseChannel;
@@ -21,8 +21,8 @@ public class TesisComparator implements Comparator<PixelWeight>{
     }
 
     @Override
-    public int compare(PixelWeight o1, PixelWeight o2) {
-        if (o1.getWeight() == o2.getWeight()) {
+    public int compare(PixelWeight2 o1, PixelWeight2 o2) {
+        if (o1.getElemento() == o2.getElemento()) {
             //pesos iguales, se va a decidir en el lexicografico
             int [] color1 = o1.getPixel();
             int [] color2 = o2.getPixel();
@@ -37,7 +37,7 @@ public class TesisComparator implements Comparator<PixelWeight>{
                 }
             }
             return 0;
-        }else if ( o1.getWeight() < o2.getWeight() ) {
+        }else if ( o1.getElemento() < o2.getElemento() ) {
             valorReducido++;
             return -1;
         } else {

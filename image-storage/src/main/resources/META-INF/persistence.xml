@@ -7,7 +7,6 @@
     <class>py.com.mabpg.imagestorage.models.RgbImageDataChannelRed</class>
     <class>py.com.mabpg.imagestorage.models.RgbImageDataChannelBlue</class>       
     <class>py.com.mabpg.imagestorage.models.RgbWindow</class>
-  </persistence-unit>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost/tesisadrimab"/>
       <property name="javax.persistence.jdbc.user" value="postgres"/>

@@ -12,8 +12,8 @@ import java.util.List;
  * @author belis
  */
 public class FormulaPeso {
-    
-    private List<Integer> pesos;
+       
+    private List<PixelWeight2> orderPixelWeight;
     
     private Pixel posicionMediana;
     //private ;
@@ -21,13 +21,11 @@ public class FormulaPeso {
     public FormulaPeso() {
     }
     
-    public List<Integer> getPesos() {
-        return pesos;
+    public List<PixelWeight2> getOrderPixelWeight() {
+        return orderPixelWeight;
     }
 
-    public void setPesos(List<Integer> pesos) {
-        this.pesos = pesos;
+    public void setOrderPixelWeight(List<PixelWeight2> orderPixelWeight) {
+        this.orderPixelWeight = orderPixelWeight;
     }
-    
-    
 }

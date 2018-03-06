@@ -19,6 +19,7 @@ import py.com.mabpg.imagestorage.utils.RgbImageJpaController;
 import py.com.mabpg.tesisrgb.models.FormulaPeso;
 import py.com.mabpg.tesisrgb.models.Pixel;
 import py.com.mabpg.tesisrgb.models.PixelWeight;
+import py.com.mabpg.tesisrgb.models.PixelWeight2;
 import py.com.mabpg.tesisrgb.models.TesisComparator;
 
 /**
@@ -100,13 +101,13 @@ public abstract class BasicFilterAbstract {
     /*Hallamos cada uno de los elementos (en sus tres componentes, RGB)dentro de la mascara
     además de la media, la desviacion estandar y seteamos la cte de escalamiento
     que nos servira para hallar las formulas de los pesos */
-    public List<PixelWeight> preOrder(Pixel p) {
+    public List<PixelWeight2> preOrder(Pixel p) {
         int cLength = channels.length;
         int x, y;
         double t = 0.0;
         int[] rgbColor;
-        List<PixelWeight> orderPixelWeight = new ArrayList<>();
-        PixelWeight pixelWeight;
+        List<PixelWeight2> orderPixelWeight = new ArrayList<>();
+        PixelWeight2 pixelWeight;
         int media = 0;
         int cantElementos = 0;
 
@@ -123,9 +124,9 @@ public abstract class BasicFilterAbstract {
                     t = t + rgbColor[channel];
                 }
 
-                pixelWeight = new PixelWeight(rgbColor, t/3);
+                pixelWeight = new PixelWeight2(rgbColor, t/3, 0);
                 orderPixelWeight.add(pixelWeight);
-                media = media + (int) pixelWeight.getWeight();
+                media = media + (int) pixelWeight.getElemento();
                 t = 0.0;
             }
         }
@@ -137,8 +138,8 @@ public abstract class BasicFilterAbstract {
         /*Hallamos la desviacion estandar */
         double diferencia = 0;
         double desvSt = 0;
-        for (PixelWeight elem : orderPixelWeight) {
-            diferencia = elem.getWeight() - (double)formulaPrevia.getMedia();
+        for (PixelWeight2 elem : orderPixelWeight) {
+            diferencia = elem.getElemento() - (double)formulaPrevia.getMedia();
             desvSt = desvSt + Math.pow(diferencia,2);
         }
         desvSt = desvSt / orderPixelWeight.size();
@@ -150,21 +151,20 @@ public abstract class BasicFilterAbstract {
         return orderPixelWeight;
     }
     
-    public void hallarPesos (List<PixelWeight> orderPixelWeight) {
-        List<Integer> listPesos = new ArrayList<>();
+    public void hallarPesos (List<PixelWeight2> orderPixelWeight) {
+        List<Double> listPesos = new ArrayList<>();
         List<Double> distancias = formulaPrevia.getDistancia();
-        int indice = 0;
-        int maximo = -1;
+        double maximo = -1.0;
         int indiceMax = -1;
-        int formula = 0;
+        double formula = 0.0;
         
         /*armamos una parte de la formula para hallar cada peso, y hallamos
         el máximo elemento para usar como peso del elemento central*/
-        for (PixelWeight elem : orderPixelWeight) {
-            formula = (int)(formulaPrevia.getCteEscalamiento() * distancias.get(indice)
-            * formulaPrevia.getDsvStandar() / formulaPrevia.getMedia());
+        for (int indice = 0; indice < distancias.size(); indice++) {
+        
+            formula = formulaPrevia.getCteEscalamiento() * distancias.get(indice)
+            * formulaPrevia.getDsvStandar() / formulaPrevia.getMedia();
             listPesos.add(formula);
-            indice = indice + 1;
             
             if(formula > maximo){
                 maximo = formula;
@@ -175,40 +175,19 @@ public abstract class BasicFilterAbstract {
         /*Hallamos la formula completa de cada peso*/
         for (int i = 0; i < listPesos.size(); i++) {
             if (i != indiceMax) {
-                formula = maximo - listPesos.get(i);
-                listPesos.set(i, formula);
+                formula = Math.ceil(maximo - listPesos.get(i));
+                orderPixelWeight.get(i).setWeight(formula);
             }
         }
-        formulaPeso.setPesos(listPesos);
-        /**/
+        
+        formulaPeso.setOrderPixelWeight(orderPixelWeight);
+       
     }
     
-    public int[] order(double[] weight, Pixel p) {
+    public int[] order(List<PixelWeight2> orderPixelWeight, Pixel p) {
         int cLength = channels.length;
-        int x, y;
-        double t = 0.0;
-        int[] rgbColor;
-        List<PixelWeight> orderPixelWeight = new ArrayList<>();
-        PixelWeight pixelWeight;
+      
         int[] filterP;
-
-        for (Pixel sePixel : se) {
-            x = p.getX() + sePixel.getX();
-            y = p.getY() + sePixel.getY();
-            //verificamos si esta en la ventana del elemento estructurante
-            if (x > -1 && x < width && y > -1 && y < height) {
-                rgbColor = new int[cLength];
-                for (int channel = 0; channel < cLength; channel++) {
-                    rgbColor[channel] = channels[channel].get(x, y);
-                    //t = t + weight[channel] * rgbColor[channel];
-                    t = t + rgbColor[channel];
-                }
-
-                pixelWeight = new PixelWeight(rgbColor, t/3);
-                orderPixelWeight.add(pixelWeight);
-                t = 0.0;
-            }
-        }
 
         TesisComparator comparator = new TesisComparator(cLength);
         //ordenamos por peso
@@ -230,23 +209,29 @@ public abstract class BasicFilterAbstract {
     }
 
     //implementaciones de los filtros
-    public int[] min(List<PixelWeight> orderPixelWeight) {
+    public int[] min(List<PixelWeight2> orderPixelWeight) {
         int element = 0;
         return orderPixelWeight.get(element).getPixel();
     }
 
-    public int[] max(List<PixelWeight> orderPixelWeight) {
+    public int[] max(List<PixelWeight2> orderPixelWeight) {
         int element = orderPixelWeight.size() -  1;
         return orderPixelWeight.get(element).getPixel();
     }
 
-    public int[] median(List<PixelWeight> orderPixelWeight) {
-        int element = (int) Math.ceil(orderPixelWeight.size() / 2);
+    public int[] median(List<PixelWeight2> orderPixelWeight) {
+        
+        int cantElementos = 0;
+        for (PixelWeight2 elem : orderPixelWeight) {
+            cantElementos = cantElementos + (int)elem.getWeight();
+        }
+        int element = (int) Math.ceil(cantElementos / 2); //posicion mediana
+
         return orderPixelWeight.get(element).getPixel();
     }
 
     //solicitar tipo de filtro
-    public int[] getFilter(List<PixelWeight> orderPixelWeight){
+    public int[] getFilter(List<PixelWeight2> orderPixelWeight){
         switch(filter){
             case "Min":
                 return min(orderPixelWeight);
@@ -280,9 +265,9 @@ public abstract class BasicFilterAbstract {
                 pixel = new Pixel(x, y);
                 realWeight = getRealWeight(pixel);
                 hallarDistancias(x,y);
-                List<PixelWeight> prueba = preOrder(pixel);
+                List<PixelWeight2> prueba = preOrder(pixel);
                 hallarPesos(prueba);
-                elementP = order(realWeight, pixel);
+                elementP = order(prueba, pixel);
                 restoredColProcessor.putPixel(x, y, elementP);
             }
         }
