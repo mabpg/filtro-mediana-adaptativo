@@ -15,10 +15,10 @@ public class FormulaPeso {
        
     private List<PixelWeight2> orderPixelWeight;
     
-    private Pixel posicionMediana;
-    //private ;
+    private  boolean banderaPesosCero;
 
     public FormulaPeso() {
+        this.banderaPesosCero = false;
     }
     
     public List<PixelWeight2> getOrderPixelWeight() {
@@ -28,4 +28,12 @@ public class FormulaPeso {
     public void setOrderPixelWeight(List<PixelWeight2> orderPixelWeight) {
         this.orderPixelWeight = orderPixelWeight;
     }
+
+    public boolean getBanderaPesosCero() {
+        return banderaPesosCero;
+    }
+
+    public void setBanderaPesosCero(boolean banderaPesosCero) {
+        this.banderaPesosCero = banderaPesosCero;
+    }    
 }

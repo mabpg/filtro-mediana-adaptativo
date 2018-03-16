@@ -19,9 +19,9 @@ public class FormulaPrevia {
     
     private int posYelemCentral;
     
-    private int media;
+    private double media;
     
-    private int dsvStandar;
+    private double dsvStandar;
     
     private double cteEscalamiento;
 
@@ -52,19 +52,19 @@ public class FormulaPrevia {
         this.posYelemCentral = posYelemCentral;
     }
 
-    public int getDsvStandar() {
+    public double getDsvStandar() {
         return dsvStandar;
     }
 
-    public void setDsvStandar(int dsvStandar) {
+    public void setDsvStandar(double dsvStandar) {
         this.dsvStandar = dsvStandar;
     }
 
-    public int getMedia() {
+    public double getMedia() {
         return media;
     }
 
-    public void setMedia(int media) {
+    public void setMedia(double media) {
         this.media = media;
     }
 

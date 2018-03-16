@@ -13,12 +13,16 @@ import java.util.Arrays;
 public class PixelWeight2 {
     private int[] pixel;
     private double elemento;
-    private double weight;    
+    private double weight;
+    private int posX;
+    private int posY;
 
-    public PixelWeight2(int[] pixel, double elemento, double weight) {
+    public PixelWeight2(int[] pixel, double elemento, double weight, int x, int y) {
         this.pixel = pixel;
         this.elemento = elemento;
-        this.weight = weight;        
+        this.weight = weight;
+        this.posX = x;
+        this.posY = y;
     }
 
     public int[] getPixel() {
@@ -43,6 +47,22 @@ public class PixelWeight2 {
 
     public void setElemento(double elemento) {
         this.elemento = elemento;
+    }
+
+    public int getPosX() {
+        return posX;
+    }
+
+    public int getPosY() {
+        return posY;
+    }
+
+    public void setPosX(int posX) {
+        this.posX = posX;
+    }
+
+    public void setPosY(int posY) {
+        this.posY = posY;
     }
 
     @Override

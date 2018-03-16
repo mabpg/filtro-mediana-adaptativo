@@ -108,7 +108,7 @@ public abstract class BasicFilterAbstract {
         int[] rgbColor;
         List<PixelWeight2> orderPixelWeight = new ArrayList<>();
         PixelWeight2 pixelWeight;
-        int media = 0;
+        double media = 0;
         int cantElementos = 0;
 
         for (Pixel sePixel : se) {
@@ -124,9 +124,9 @@ public abstract class BasicFilterAbstract {
                     t = t + rgbColor[channel];
                 }
 
-                pixelWeight = new PixelWeight2(rgbColor, t/3, 0);
+                pixelWeight = new PixelWeight2(rgbColor, t/3, 0,x,y);
                 orderPixelWeight.add(pixelWeight);
-                media = media + (int) pixelWeight.getElemento();
+                media = media + pixelWeight.getElemento();
                 t = 0.0;
             }
         }
@@ -139,12 +139,12 @@ public abstract class BasicFilterAbstract {
         double diferencia = 0;
         double desvSt = 0;
         for (PixelWeight2 elem : orderPixelWeight) {
-            diferencia = elem.getElemento() - (double)formulaPrevia.getMedia();
+            diferencia = elem.getElemento() - formulaPrevia.getMedia();
             desvSt = desvSt + Math.pow(diferencia,2);
         }
         desvSt = desvSt / orderPixelWeight.size();
         
-        formulaPrevia.setDsvStandar((int)desvSt);
+        formulaPrevia.setDsvStandar(desvSt);
         
         formulaPrevia.setCteEscalamiento(0.3);
         
@@ -174,6 +174,10 @@ public abstract class BasicFilterAbstract {
         
         /*Hallamos la formula completa de cada peso*/
         for (int i = 0; i < listPesos.size(); i++) {
+            if (maximo <= 0) {          //PARA QUE NO HAYA CICLO INFINITO
+                formulaPeso.setBanderaPesosCero(true);
+                break;
+            }
             if (i != indiceMax) {
                 formula = Math.ceil(maximo - listPesos.get(i));
                 orderPixelWeight.get(i).setWeight(formula);
@@ -274,13 +278,26 @@ public abstract class BasicFilterAbstract {
 
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
+                
+                System.out.println("Pixel x: " + x + "y: " + y);
                 pixel = new Pixel(x, y);
                 //realWeight = getRealWeight(pixel);
                 hallarDistancias(x,y);
                 List<PixelWeight2> prueba = preOrder(pixel);
                 hallarPesos(prueba);
-                elementP = order(prueba);
-                restoredColProcessor.putPixel(x, y, elementP);
+                //EN CASO DE QUE TODOS LOS PESOS SEAN CERO
+                /*if(formulaPeso.getBanderaPesosCero()) {
+                    int [] elementPixel = new int [2];
+                    
+                    formulaPeso.getOrderPixelWeight();
+                    elementPixel[0] = x;
+                    elementPixel[1] = y;
+                    restoredColProcessor.putPixel(x, y, elementPixel);
+                } else {*/
+                    elementP = order(prueba);
+                    restoredColProcessor.putPixel(x, y, elementP);
+                //}
+                
             }
         }
 
