@@ -286,18 +286,12 @@ public abstract class BasicFilterAbstract {
                 List<PixelWeight2> prueba = preOrder(pixel);
                 hallarPesos(prueba);
                 //EN CASO DE QUE TODOS LOS PESOS SEAN CERO
-                /*if(formulaPeso.getBanderaPesosCero()) {
-                    int [] elementPixel = new int [2];
-                    
-                    formulaPeso.getOrderPixelWeight();
-                    elementPixel[0] = x;
-                    elementPixel[1] = y;
-                    restoredColProcessor.putPixel(x, y, elementPixel);
-                } else {*/
+                if(formulaPeso.getBanderaPesosCero()) {
+                    elementP = devolver(x,y);
+                } else {
                     elementP = order(prueba);
-                    restoredColProcessor.putPixel(x, y, elementP);
-                //}
-                
+                }
+                restoredColProcessor.putPixel(x, y, elementP);
             }
         }
 
@@ -315,6 +309,18 @@ public abstract class BasicFilterAbstract {
 
         reducedValue = (double)reducedValueCounter/(double)totalDecisiones;
         return restoredColProcessor;
+    }
+    
+    //metodo que devuelve el elemento dada la posicion x e y dentro de la imagen
+    public int [] devolver (int posX, int posY) {
+        
+        for (PixelWeight2 elemento: formulaPeso.getOrderPixelWeight()) {
+            if (elemento.getPosX() == posX && elemento.getPosY() == posY ) {
+                return elemento.getPixel();
+            }
+        }
+        
+        return null;
     }
     
     /**
