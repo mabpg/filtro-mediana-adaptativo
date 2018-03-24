@@ -127,7 +127,8 @@ public class TestImageManager {
                                                 ColorProcessor colImgNoiseRestored = taskResult.get().getColProcessor();
                                                 Metrics metricas = new Metrics(colImgOriginal, colImgNoiseRestored);
                                                 //logger.info(i + ", "  + ventanas[0] + "x" + ventanas[1] + ", " + noiseName + ", " + s +  ", " + nombreFiltro + ", " + combinacion + ", " + j + ", " + metricas.mae() + ", " + metricas.mse() + ", " + metricas.nmse() + ", " + TestAny.decisionValorReducido + ", " + TestAny.decisionComp[0] + ", " + TestAny.decisionComp[1] + ", " + TestAny.decisionComp[2]);
-                                                logger.info(taskResult.get().toString() + ", "  + combinacion + ", " + j +  ", " + refHue + ", " + noiseName + ", " + metricas.toString());
+                                                //logger.info(taskResult.get().toString() + ", "  + combinacion + ", " + j +  ", " + refHue + ", " + noiseName + ", " + metricas.toString());
+                                                logger.info(taskResult.get().toString() + ", combinacion: "  + combinacion + ", dimensionMascara: " + j +  ", noiseName: " + noiseName + ", " + metricas.toString());
                                                 if(config.GUARDAR_IMAGENES){
                                                     ImagePlus imgPlus = new ImagePlus(nombreFiltro, colImgNoiseRestored);
                                                     new FileSaver(imgPlus).saveAsPng(pathRestoredMethodImg + "/" + imgName + "_" + taskResult.get().toString() + ".jpg");
