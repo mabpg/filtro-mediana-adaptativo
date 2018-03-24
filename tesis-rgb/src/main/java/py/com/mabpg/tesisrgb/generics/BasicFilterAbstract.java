@@ -18,7 +18,6 @@ import py.com.mabpg.imagestorage.models.RgbImage;
 import py.com.mabpg.imagestorage.utils.RgbImageJpaController;
 import py.com.mabpg.tesisrgb.models.FormulaPeso;
 import py.com.mabpg.tesisrgb.models.Pixel;
-import py.com.mabpg.tesisrgb.models.PixelWeight;
 import py.com.mabpg.tesisrgb.models.PixelWeight2;
 import py.com.mabpg.tesisrgb.models.TesisComparator;
 
@@ -279,7 +278,7 @@ public abstract class BasicFilterAbstract {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 
-                System.out.println("Pixel x: " + x + "y: " + y);
+               
                 pixel = new Pixel(x, y);
                 //realWeight = getRealWeight(pixel);
                 hallarDistancias(x,y);
@@ -292,6 +291,9 @@ public abstract class BasicFilterAbstract {
                     elementP = order(prueba);
                 }
                 restoredColProcessor.putPixel(x, y, elementP);
+                if (x == width - 1 && y == height - 1) {
+                    System.out.println("Pixel x: " + x + "y: " + y);
+                }
             }
         }
 

@@ -21,9 +21,9 @@ public class TestConfig {
         //Ruidos.Pepper.class
     };
     
-    public double PROBABILIDAD_RUIDO_FROM = 0.105;
-    public double PROBABILIDAD_RUDO_TO = 0.105;
-    public double PROBABILIDAD_RUIDO_STEP = 0.105;
+    public double PROBABILIDAD_RUIDO_FROM = 0.005;
+    public double PROBABILIDAD_RUDO_TO = 0.165;
+    public double PROBABILIDAD_RUIDO_STEP = 0.01;
     public int PROBABILIDAD_RUIDO_CANT = (int)(PROBABILIDAD_RUDO_TO/PROBABILIDAD_RUIDO_STEP);
     
     public int CANTIDAD_HILOS_TESTS = 10;
@@ -37,8 +37,8 @@ public class TestConfig {
         {2, 1, 0}
     };
     
-    public int INDEX_IMAGENES_FROM = 7;
-    public int INDEX_IMAGENES_TO = 7;
+    public int INDEX_IMAGENES_FROM = 1;
+    public int INDEX_IMAGENES_TO = 1;
     
     public String BASE_PATH = "C:/Users/belis/Documents/lastOne/recursos/images";
     public String PATH_ORIGINAL_IMAGE = BASE_PATH + "test";
