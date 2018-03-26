@@ -103,7 +103,7 @@ public abstract class BasicFilterAbstract {
     public List<PixelWeight2> preOrder(Pixel p) {
         int cLength = channels.length;
         int x, y;
-        double t = 0.0;
+        int t = 0;
         int[] rgbColor;
         List<PixelWeight2> orderPixelWeight = new ArrayList<>();
         PixelWeight2 pixelWeight;
@@ -126,12 +126,12 @@ public abstract class BasicFilterAbstract {
                 pixelWeight = new PixelWeight2(rgbColor, t/3, 0,x,y);
                 orderPixelWeight.add(pixelWeight);
                 media = media + pixelWeight.getElemento();
-                t = 0.0;
+                t = 0;
             }
         }
         //logger.debug("orderPixelWeight={}", orderPixelWeight.toString());
         if (cantElementos > 0) {
-            formulaPrevia.setMedia(media/cantElementos);
+            formulaPrevia.setMedia((int) (Math.ceil(media)/cantElementos));
         }
          
         /*Hallamos la desviacion estandar */
@@ -143,7 +143,7 @@ public abstract class BasicFilterAbstract {
         }
         desvSt = desvSt / orderPixelWeight.size();
         
-        formulaPrevia.setDsvStandar(desvSt);
+        formulaPrevia.setDsvStandar((int)Math.ceil(desvSt));
         
         formulaPrevia.setCteEscalamiento(0.3);
         
@@ -169,6 +169,9 @@ public abstract class BasicFilterAbstract {
                 maximo = formula;
                 indiceMax = indice;
             }
+            if(indice == distancias.size() - 1) { //el peso del elemento central va a ser el valor maximo + 2
+                maximo = maximo + 2;
+            }
         } 
         
         /*Hallamos la formula completa de cada peso*/
@@ -177,10 +180,12 @@ public abstract class BasicFilterAbstract {
                 formulaPeso.setBanderaPesosCero(true);
                 break;
             }
-            if (i != indiceMax) {
-                formula = Math.ceil(maximo - listPesos.get(i));
-                orderPixelWeight.get(i).setWeight(formula);
-            }
+            //if (i != indiceMax) {
+                formula = maximo - listPesos.get(i);
+                orderPixelWeight.get(i).setWeight((int)Math.ceil(formula));
+            //} else { //la formula 
+                //orderPixelWeight.get(i).setWeight((int)Math.ceil(maximo));
+            //}
         }
         
         formulaPeso.setOrderPixelWeight(orderPixelWeight);
@@ -275,10 +280,10 @@ public abstract class BasicFilterAbstract {
         setWindowsList();
         weight = getWeight();
 
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
+        for (int y = 197; y < height; y++) {
+            for (int x = 450; x < width; x++) {
                 
-               
+               System.out.println("Pixel X: " + x + "Y: " + y);
                 pixel = new Pixel(x, y);
                 //realWeight = getRealWeight(pixel);
                 hallarDistancias(x,y);

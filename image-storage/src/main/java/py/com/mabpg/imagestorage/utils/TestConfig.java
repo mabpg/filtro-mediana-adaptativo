@@ -22,7 +22,7 @@ public class TestConfig {
     };
     
     public double PROBABILIDAD_RUIDO_FROM = 0.005;
-    public double PROBABILIDAD_RUDO_TO = 0.165;
+    public double PROBABILIDAD_RUDO_TO = 0.175;
     public double PROBABILIDAD_RUIDO_STEP = 0.01;
     public int PROBABILIDAD_RUIDO_CANT = (int)(PROBABILIDAD_RUDO_TO/PROBABILIDAD_RUIDO_STEP);
     
@@ -37,8 +37,8 @@ public class TestConfig {
         {2, 1, 0}
     };
     
-    public int INDEX_IMAGENES_FROM = 1;
-    public int INDEX_IMAGENES_TO = 1;
+    public int INDEX_IMAGENES_FROM = 100;
+    public int INDEX_IMAGENES_TO = 100;
     
     public String BASE_PATH = "C:/Users/belis/Documents/lastOne/recursos/images";
     public String PATH_ORIGINAL_IMAGE = BASE_PATH + "test";
@@ -52,7 +52,7 @@ public class TestConfig {
             
     public int N_SE_FROM = 3;
     public int N_SE_TO = 3;
-    public int N_SE_STEP = 3;
+    public int N_SE_STEP = 2;
     
     //se puede inicializar filtros aqui indicando los nombres de los filtros (clase TestConstants)
     //List<String> FILTROS = Arrays.asList(TESIS_RGB_ENTROPY, TESIS_RGB_MEAN, TESIS_RGB_S_DEVIATION);

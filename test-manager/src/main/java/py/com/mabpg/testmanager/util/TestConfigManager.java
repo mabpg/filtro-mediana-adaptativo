@@ -45,8 +45,8 @@ public class TestConfigManager {
         {2, 1, 0}
     };
     
-    public int INDEX_IMAGENES_FROM = 1;
-    public int INDEX_IMAGENES_TO = 1;
+    public int INDEX_IMAGENES_FROM = 100;
+    public int INDEX_IMAGENES_TO = 100;
            
 
     //public String BASE_PATH = "/home/jvazquez/median_filters/images/imgs/";
@@ -58,8 +58,8 @@ public class TestConfigManager {
     
     public int ALPHA = 10;
             
-    public int N_SE_FROM = 7;
-    public int N_SE_TO = 7;
+    public int N_SE_FROM = 3;
+    public int N_SE_TO = 3;
     public int N_SE_STEP = 2;
     
     //se puede inicializar filtros aqui indicando los nombres de los filtros (clase TestConstants)
