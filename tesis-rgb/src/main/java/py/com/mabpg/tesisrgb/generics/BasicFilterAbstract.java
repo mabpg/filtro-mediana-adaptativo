@@ -103,7 +103,7 @@ public abstract class BasicFilterAbstract {
     public List<PixelWeight2> preOrder(Pixel p) {
         int cLength = channels.length;
         int x, y;
-        int t = 0;
+        double t = 0;
         int[] rgbColor;
         List<PixelWeight2> orderPixelWeight = new ArrayList<>();
         PixelWeight2 pixelWeight;
@@ -123,7 +123,7 @@ public abstract class BasicFilterAbstract {
                     t = t + rgbColor[channel];
                 }
 
-                pixelWeight = new PixelWeight2(rgbColor, t/3, 0,x,y);
+                pixelWeight = new PixelWeight2(rgbColor, (int)Math.ceil(t/3), 0,x,y);
                 orderPixelWeight.add(pixelWeight);
                 media = media + pixelWeight.getElemento();
                 t = 0;
@@ -131,19 +131,19 @@ public abstract class BasicFilterAbstract {
         }
         //logger.debug("orderPixelWeight={}", orderPixelWeight.toString());
         if (cantElementos > 0) {
-            formulaPrevia.setMedia((int) (Math.ceil(media)/cantElementos));
+            formulaPrevia.setMedia((int) Math.ceil((media)/cantElementos));
         }
          
         /*Hallamos la desviacion estandar */
         double diferencia = 0;
-        double desvSt = 0;
+        double varianza = 0;
         for (PixelWeight2 elem : orderPixelWeight) {
             diferencia = elem.getElemento() - formulaPrevia.getMedia();
-            desvSt = desvSt + Math.pow(diferencia,2);
+            varianza = varianza + Math.pow(diferencia,2);
         }
-        desvSt = desvSt / orderPixelWeight.size();
+        varianza = varianza / orderPixelWeight.size();
         
-        formulaPrevia.setDsvStandar((int)Math.ceil(desvSt));
+        formulaPrevia.setVarianza((int)Math.ceil(varianza));
         
         formulaPrevia.setCteEscalamiento(0.3);
         
@@ -280,8 +280,8 @@ public abstract class BasicFilterAbstract {
         setWindowsList();
         weight = getWeight();
 
-        for (int y = 197; y < height; y++) {
-            for (int x = 450; x < width; x++) {
+        for (int y = 89; y < height; y++) {
+            for (int x = 108; x < width; x++) {
                 
                System.out.println("Pixel X: " + x + "Y: " + y);
                 pixel = new Pixel(x, y);

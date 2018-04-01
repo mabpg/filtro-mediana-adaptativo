@@ -21,7 +21,7 @@ public class FormulaPrevia {
     
     private int media;
     
-    private int dsvStandar;
+    private int varianza;
     
     private double cteEscalamiento;
 
@@ -53,11 +53,11 @@ public class FormulaPrevia {
     }
 
     public double getDsvStandar() {
-        return dsvStandar;
+        return varianza;
     }
 
-    public void setDsvStandar(int dsvStandar) {
-        this.dsvStandar = dsvStandar;
+    public void setVarianza(int varianza) {
+        this.varianza = varianza;
     }
 
     public double getMedia() {
