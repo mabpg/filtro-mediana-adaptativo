@@ -13,8 +13,8 @@ public class TestConfig {
     public List<Integer> WINDOWSLIST = Arrays.asList(1);
     
     public Class[] RUIDOS = {
-        //Ruidos.Gaussian.class
-        Ruidos.Speckle.class
+        Ruidos.Gaussian.class,
+        //Ruidos.Speckle.class,
         //Ruidos.Impulsive.class,
         //Ruidos.Poisson.class,
         //Ruidos.Salt.class,
@@ -23,6 +23,7 @@ public class TestConfig {
     
     public double PROBABILIDAD_RUIDO_FROM = 0.005;
     public double PROBABILIDAD_RUDO_TO = 0.175;
+    //public double PROBABILIDAD_RUIDO_STEP = 0.105; // ojo: cuando queremos usar una sola probabilidad, hay que usar el mismo valor aca
     public double PROBABILIDAD_RUIDO_STEP = 0.01;
     public int PROBABILIDAD_RUIDO_CANT = (int)(PROBABILIDAD_RUDO_TO/PROBABILIDAD_RUIDO_STEP);
     
@@ -37,7 +38,7 @@ public class TestConfig {
         {2, 1, 0}
     };
     
-    public int INDEX_IMAGENES_FROM = 100;
+    public int INDEX_IMAGENES_FROM = 1;
     public int INDEX_IMAGENES_TO = 100;
     
     public String BASE_PATH = "C:/Users/belis/Documents/lastOne/recursos/images";
@@ -46,7 +47,7 @@ public class TestConfig {
     public String RESTORED_PATH_SUFFIX = "/restored";
     public String EXTENSION = "jpg";
     public String EXTENSION_GRAY = "BMP";
-    public int TAMAÑO_VENTANA = 5;
+    public int TAMAÑO_VENTANA = 3;
     
     public int ALPHA = 10;
             

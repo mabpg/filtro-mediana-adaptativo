@@ -565,7 +565,7 @@ public class Metrics {
         
         
         //return maeHsv[0] + ", " + maeHsv[1] + ", " + maeHsv[2] + ", euclideanDistance: " + euclideanDistance + ", NormalizeColorDifference: " + ncd + ", calculateOnlySimilarityMetrics: " + m1 + ", metricOfSimilarityM2: " + m2 + ", MAE: " + mae;
-        return  "euclideanDistance: " + euclideanDistance + ", MAE: " + mae;
+        return  "euclideanDistance: " + euclideanDistance + "," + mae;
     }
     
 }

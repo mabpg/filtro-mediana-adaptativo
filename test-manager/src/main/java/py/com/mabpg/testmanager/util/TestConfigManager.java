@@ -21,8 +21,8 @@ public class TestConfigManager {
     public int[] LISTA_VENTANAS = {1};
     
     public Class[] RUIDOS = {
-        //Ruidos.Gaussian.class, 
-        Ruidos.Speckle.class,
+        Ruidos.Gaussian.class, 
+        //Ruidos.Speckle.class,
         //Ruidos.Poisson.class
         //Ruidos.Impulsive.class,
         //Ruidos.Salt.class,
@@ -45,7 +45,7 @@ public class TestConfigManager {
         {2, 1, 0}
     };
     
-    public int INDEX_IMAGENES_FROM = 100;
+    public int INDEX_IMAGENES_FROM = 1;
     public int INDEX_IMAGENES_TO = 100;
            
 
