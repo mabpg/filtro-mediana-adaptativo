@@ -14,15 +14,15 @@ import py.com.mabpg.testmanager.util.TestConstantsManager.Ruidos;
  */
 public class TestConfigManager {
 
-    public boolean GUARDAR_IMAGENES = true;
+    public boolean GUARDAR_IMAGENES = false;
 
     //public int[] LISTA_VENTANAS = {1, 5, 7};
     
     public int[] LISTA_VENTANAS = {1};
     
     public Class[] RUIDOS = {
-        Ruidos.Gaussian.class, 
-        //Ruidos.Speckle.class,
+        //Ruidos.Gaussian.class, 
+        Ruidos.Speckle.class,
         //Ruidos.Poisson.class
         //Ruidos.Impulsive.class,
         //Ruidos.Salt.class,

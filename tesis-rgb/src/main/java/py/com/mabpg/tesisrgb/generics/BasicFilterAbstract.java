@@ -45,6 +45,8 @@ public abstract class BasicFilterAbstract {
     
     public FormulaPeso formulaPeso;
     
+    public FiltroMedianaPesosAdaptativos adaptative;
+    
     public String [] components = {"R", "G", "B"};
     //defaultOrder
     public int[] componentsOrder = {0, 1, 2};
@@ -72,128 +74,11 @@ public abstract class BasicFilterAbstract {
         this.height = noisyColProcessor.getHeight();
         this.width = noisyColProcessor.getWidth();
         this.channels = rgbImage.getChannels();
+        this.adaptative = new FiltroMedianaPesosAdaptativos(this.se, this.height, this.width, this.channels);
         rgbImageJpaController = new RgbImageJpaController();
     }
 
     public abstract void setWindowsList() throws Exception;
-    
-    /*Se hallan todas las distancias desde el elemento central de la máscara
-    o elemento estructurante a cada elemento, en las posiciones posibles*/
-    public void hallarDistancias(int posXcentral, int posYcentral) {                
-        formulaPrevia.setPosXelemCentral(posXcentral);
-        formulaPrevia.setPosYelemCentral(posYcentral);
-        int x, y;
-        double x1,y1;
-        List<Double> distancias = new ArrayList<>();
-        for (Pixel sePixel : se) {
-            
-            x = posXcentral + sePixel.getX();
-            y = posYcentral + sePixel.getY();
-            
-            if (x > -1 && x < width && y > -1 && y < height) {
-                x1 = Math.pow(((double)posXcentral) - (double)(x),2.0);   //OJO VOLVER A MIRAR ESTA PARTE
-                y1 = Math.pow(((double)posYcentral) - (double)(y),2.0); 
-                distancias.add(Math.sqrt(x1 + y1));
-            }
-        }
-        formulaPrevia.setDistancia(distancias);
-    }
-    
-    /*Hallamos cada uno de los elementos (en sus tres componentes, RGB)dentro de la mascara
-    además de la media, la desviacion estandar y seteamos la cte de escalamiento
-    que nos servira para hallar las formulas de los pesos */
-    public List<PixelWeight2> preOrder(Pixel p) {
-        int cLength = channels.length;
-        int x, y;
-        double t = 0;
-        int[] rgbColor;
-        List<PixelWeight2> orderPixelWeight = new ArrayList<>();
-        PixelWeight2 pixelWeight;
-        double media = 0;
-        int cantElementos = 0;
-
-        for (Pixel sePixel : se) {
-            x = p.getX() + sePixel.getX();
-            y = p.getY() + sePixel.getY();
-            //verificamos si esta en la ventana del elemento estructurante
-            if (x > -1 && x < width && y > -1 && y < height) {
-                rgbColor = new int[cLength];
-                cantElementos = cantElementos + 1;    //para hallar la media dentro de la mascara
-                for (int channel = 0; channel < cLength; channel++) {
-                    rgbColor[channel] = channels[channel].get(x, y);
-                    //t = t + weight[channel] * rgbColor[channel];
-                    t = t + rgbColor[channel];
-                }
-
-                pixelWeight = new PixelWeight2(rgbColor, (int)Math.ceil(t/3), 0,x,y);
-                orderPixelWeight.add(pixelWeight);
-                media = media + pixelWeight.getElemento();
-                t = 0;
-            }
-        }
-        //logger.debug("orderPixelWeight={}", orderPixelWeight.toString());
-        if (cantElementos > 0) {
-            formulaPrevia.setMedia((int) Math.ceil((media)/cantElementos));
-        }
-         
-        /*Hallamos la desviacion estandar */
-        double diferencia = 0;
-        double varianza = 0;
-        for (PixelWeight2 elem : orderPixelWeight) {
-            diferencia = elem.getElemento() - formulaPrevia.getMedia();
-            varianza = varianza + Math.pow(diferencia,2);
-        }
-        varianza = varianza / orderPixelWeight.size();
-        
-        formulaPrevia.setVarianza((int)Math.ceil(varianza));
-        
-        formulaPrevia.setCteEscalamiento(0.3);
-        
-        return orderPixelWeight;
-    }
-    
-    public void hallarPesos (List<PixelWeight2> orderPixelWeight) {
-        List<Double> listPesos = new ArrayList<>();
-        List<Double> distancias = formulaPrevia.getDistancia();
-        double maximo = -1.0;
-        int indiceMax = -1;
-        double formula = 0.0;
-        
-        /*armamos una parte de la formula para hallar cada peso, y hallamos
-        el máximo elemento para usar como peso del elemento central*/
-        for (int indice = 0; indice < distancias.size(); indice++) {
-        
-            formula = formulaPrevia.getCteEscalamiento() * distancias.get(indice)
-            * formulaPrevia.getDsvStandar() / formulaPrevia.getMedia();
-            listPesos.add(formula);
-            
-            if(formula > maximo){
-                maximo = formula;
-                indiceMax = indice;
-            }
-            if(indice == distancias.size() - 1) { //el peso del elemento central va a ser el valor maximo + 2
-                maximo = maximo + 2;
-            }
-        } 
-        
-        /*Hallamos la formula completa de cada peso*/
-        for (int i = 0; i < listPesos.size(); i++) {
-            if (maximo <= 0) {          //PARA QUE NO HAYA CICLO INFINITO
-                formulaPeso.setBanderaPesosCero(true);
-                //System.out.println("Igual pesos");
-                break;
-            }
-            //if (i != indiceMax) {
-                formula = maximo - listPesos.get(i);
-                orderPixelWeight.get(i).setWeight((int)Math.ceil(formula));
-            //} else { //la formula 
-                //orderPixelWeight.get(i).setWeight((int)Math.ceil(maximo));
-            //}
-        }
-        
-        formulaPeso.setOrderPixelWeight(orderPixelWeight);
-       
-    }
     
     public int[] order(List<PixelWeight2> orderPixelWeight) {
         int cLength = channels.length;
@@ -366,16 +251,16 @@ public abstract class BasicFilterAbstract {
                //System.out.println("Pixel X: " + x + "Y: " + y);
                 pixel = new Pixel(x, y);
                 //realWeight = getRealWeight(pixel);
-                hallarDistancias(x,y);
-                List<PixelWeight2> prueba = preOrder(pixel);
-                hallarPesos(prueba);
+                adaptative.hallarDistancias(x,y);
+                List<PixelWeight2> prueba = adaptative.preOrder(pixel);
+                adaptative.hallarPesos(prueba);
                 //EN CASO DE QUE TODOS LOS PESOS SEAN CERO
                 if(formulaPeso.getBanderaPesosCero()) {
                     elementP = devolver(x,y);
                 } else {
-                    elementP = order(prueba);
+                    //elementP = order(prueba);
                     
-                    //elementP = orderNew(pixel); //NUEVO ORDER
+                    elementP = orderNew(pixel); //NUEVO ORDER
                     
                 }
                 restoredColProcessor.putPixel(x, y, elementP);

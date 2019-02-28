@@ -13,8 +13,8 @@ public class TestConfig {
     public List<Integer> WINDOWSLIST = Arrays.asList(1);
     
     public Class[] RUIDOS = {
-        Ruidos.Gaussian.class,
-        //Ruidos.Speckle.class,
+        //Ruidos.Gaussian.class,
+        Ruidos.Speckle.class,
         //Ruidos.Impulsive.class,
         //Ruidos.Poisson.class,
         //Ruidos.Salt.class,
@@ -47,7 +47,6 @@ public class TestConfig {
     public String RESTORED_PATH_SUFFIX = "/restored";
     public String EXTENSION = "jpg";
     public String EXTENSION_GRAY = "BMP";
-    public int TAMAÑO_VENTANA = 3;
     
     public int ALPHA = 10;
             

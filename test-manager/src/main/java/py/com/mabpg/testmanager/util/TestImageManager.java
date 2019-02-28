@@ -84,7 +84,7 @@ public class TestImageManager {
                                     if ( !file.mkdir() ){
                                         break;
                                     }else{
-                                        System.out.println("Se creo correctamente la carpeta" + pathRestoredMethodImg);
+                                        System.out.println("Se creó correctamente la carpeta" + pathRestoredMethodImg);
                                     }
                                 }else {
                                     System.out.println("Ya existe la carpeta" + pathRestoredMethodImg);
