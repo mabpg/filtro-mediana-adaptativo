@@ -10,7 +10,6 @@ import ij.ImagePlus;
 import ij.io.FileSaver;
 import ij.process.ByteProcessor;
 import ij.process.ColorProcessor;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -18,10 +17,8 @@ import py.com.mabpg.imagestorage.models.RgbImage;
 import py.com.mabpg.imagestorage.utils.RgbImageJpaController;
 import py.com.mabpg.tesisrgb.models.FormulaPeso;
 import py.com.mabpg.tesisrgb.models.Pixel;
-import py.com.mabpg.tesisrgb.models.PixelHCL;
 import py.com.mabpg.tesisrgb.models.PixelWeight2;
 import py.com.mabpg.tesisrgb.models.TesisComparator;
-import py.com.mabpg.tesisrgb.models.TesisComparatorSymmetricMatrix;
 
 /**
  *
@@ -104,55 +101,6 @@ public abstract class BasicFilterAbstract {
         return filterP;
     }
 
-    
-    /*NUEVO ORDER A PEDIDO DEL PROFE ORDER LOEWENER*/
-    
-    public int[] orderNew(Pixel p) {
-        int cLength = channels.length;
-        int x, y;
-        double t = 0.0;
-        int[] rgbColor;
-        List<PixelHCL> orderPixelLoewner = new ArrayList<>();
-        PixelHCL pixelHCL;
-        ConverterLoewner converterL = new ConverterLoewner();
-        float[] xyz = new float[3];
-        float[][] hclColorMatrizSimetrica = new float[2][2];
-        
-        int[] filterP;
-
-        for (Pixel sePixel : se) {
-            x = p.getX() + sePixel.getX();
-            y = p.getY() + sePixel.getY();
-            //verificamos si esta en la ventana del elemento estructurante
-            if (x > -1 && x < width && y > -1 && y < height) {
-                rgbColor = new int[cLength];
-                for (int channel = 0; channel < cLength; channel++) {
-                    rgbColor[channel] = channels[channel].get(x, y); 
-                }
-
-                /**Convertir a hcl el color rgb y luego hcl a xyz**/	
-                xyz = converterL.hclToXyz(converterL.rgbToHcl(rgbColor));
-                
-                /**Obtener la matriz simetrica 2x2 correspondiente del xyz **/
-                hclColorMatrizSimetrica = converterL.xyzToSymmetricMatrix(xyz);
-                
-                
-                /**Guardar el nuevo pixel RGB, su correspondencia XYZ, matriz simetrica**/
-                pixelHCL = new PixelHCL(rgbColor, xyz, hclColorMatrizSimetrica, x, y);
-                
-                orderPixelLoewner.add(pixelHCL);
-            }
-        }
-
-        TesisComparatorSymmetricMatrix comparatorSymmetricMatrix = new TesisComparatorSymmetricMatrix(cLength);
-        //ordenamos las matrices simetricas de acuerdo al compare del comparatorSymmetricMatrix
-        orderPixelLoewner = comparatorSymmetricMatrix.ordenar(orderPixelLoewner);
-
-        //obtenemos el filtro
-        filterP = getFilterNew(orderPixelLoewner);
-
-        return filterP;
-    }
     //implementaciones de los filtros
     public int[] min(List<PixelWeight2> orderPixelWeight) {
         int element = 0;
@@ -187,35 +135,7 @@ public abstract class BasicFilterAbstract {
         }
         return null;
     }
-
-    //implementaciones Nuevas para el orden loewner
-    public int[] minNew(List<PixelHCL> orderPixelLoewner) {
-        int element = 0;
-        return orderPixelLoewner.get(element).getPixelRGB();
-    }
-
-    public int[] maxNew(List<PixelHCL> orderPixelLoewner) {
-        int element = orderPixelLoewner.size() -  1;
-        return orderPixelLoewner.get(element).getPixelRGB();
-    }
-
-    public int[] medianNew(List<PixelHCL> orderPixelLoewner) {
-        int element = (int) Math.ceil(orderPixelLoewner.size() / 2);
-        return orderPixelLoewner.get(element).getPixelRGB();
-    }
     
-    public int[] getFilterNew(List<PixelHCL> orderPixelLoewner){
-        switch(filter){
-            case "Min":
-                return minNew(orderPixelLoewner);
-            case "Max":
-                return maxNew(orderPixelLoewner);
-            case "Median":
-                return medianNew(orderPixelLoewner);
-            default:
-                return null;
-        }
-    }
     //solicitar tipo de filtro
     public int[] getFilter(List<PixelWeight2> orderPixelWeight){
         switch(filter){
@@ -258,9 +178,7 @@ public abstract class BasicFilterAbstract {
                 if(formulaPeso.getBanderaPesosCero()) {
                     elementP = devolver(x,y);
                 } else {
-                    //elementP = order(prueba);
-                    
-                    elementP = orderNew(pixel); //NUEVO ORDER
+                    elementP = order(prueba);
                     
                 }
                 restoredColProcessor.putPixel(x, y, elementP);
