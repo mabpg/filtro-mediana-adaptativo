@@ -14,7 +14,7 @@ import py.com.mabpg.testmanager.util.TestConstantsManager.Ruidos;
  */
 public class TestConfigManager {
 
-    public boolean GUARDAR_IMAGENES = false;
+    public boolean GUARDAR_IMAGENES = true;
 
     //public int[] LISTA_VENTANAS = {1, 5, 7};
     

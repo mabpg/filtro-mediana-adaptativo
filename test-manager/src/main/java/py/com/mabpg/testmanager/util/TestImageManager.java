@@ -66,7 +66,7 @@ public class TestImageManager {
                     String[] tipoDeFiltros = (String[]) noise.getField("ALLOWED_FILTERS").get(null);
                     //String basePathNoisyImg = config.BASE_PATH + noiseName + config.NOISY_PATH_SUFFIX;
                     String pathRestoredImg = config.BASE_PATH + noiseName + config.RESTORED_PATH_SUFFIX;
-                    String imgName = "img_ruido_" + noiseName;
+                    String imgName = "result_img_ruido_" + noiseName;
 
                     for (String tipoDeFiltro : tipoDeFiltros) {
                         //por cada filtro
@@ -131,7 +131,7 @@ public class TestImageManager {
                                                 logger.info(taskResult.get().toString() + ", combinacion: "  + combinacion + ", dimensionMascara: " + j +  ", noiseName: " + noiseName + ", " + metricas.toString());
                                                 if(config.GUARDAR_IMAGENES){
                                                     ImagePlus imgPlus = new ImagePlus(nombreFiltro, colImgNoiseRestored);
-                                                    new FileSaver(imgPlus).saveAsPng(pathRestoredMethodImg + "/" + imgName + "_" + taskResult.get().toString() + ".jpg");
+                                                    new FileSaver(imgPlus).saveAsPng(pathRestoredMethodImg + "/" + imgName + "_" + taskResult.get().getIndice()+ "_" + taskResult.get().getVarianza() + ".jpg");
                                                 }
                                             } catch (InterruptedException ex) {
                                             }

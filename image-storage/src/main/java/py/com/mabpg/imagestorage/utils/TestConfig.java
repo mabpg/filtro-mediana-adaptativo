@@ -22,10 +22,10 @@ public class TestConfig {
     };
     
     public double PROBABILIDAD_RUIDO_FROM = 0.005;
-    public double PROBABILIDAD_RUDO_TO = 0.175;
+    public double PROBABILIDAD_RUIDO_TO = 0.175;
     //public double PROBABILIDAD_RUIDO_STEP = 0.105; // ojo: cuando queremos usar una sola probabilidad, hay que usar el mismo valor aca
     public double PROBABILIDAD_RUIDO_STEP = 0.01;
-    public int PROBABILIDAD_RUIDO_CANT = (int)(PROBABILIDAD_RUDO_TO/PROBABILIDAD_RUIDO_STEP);
+    public int PROBABILIDAD_RUIDO_CANT = (int)(PROBABILIDAD_RUIDO_TO/PROBABILIDAD_RUIDO_STEP);
     
     public int CANTIDAD_HILOS_TESTS = 10;
     

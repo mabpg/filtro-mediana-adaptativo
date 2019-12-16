@@ -21,6 +21,34 @@ public class TaskResult {
     private ColorProcessor colProcessor;
     private double indice;
     private double varianza;
+
+    public void setBasicAbstract(BasicFilterAbstract basicAbstract) {
+        this.basicAbstract = basicAbstract;
+    }
+
+    public void setIndice(double indice) {
+        this.indice = indice;
+    }
+
+    public void setVarianza(double varianza) {
+        this.varianza = varianza;
+    }
+
+    public void setVentanas(int ventanas) {
+        this.ventanas = ventanas;
+    }
+
+    public double getIndice() {
+        return indice;
+    }
+
+    public double getVarianza() {
+        return varianza;
+    }
+
+    public int getVentanas() {
+        return ventanas;
+    }
     private int ventanas;
 
     public TaskResult(BasicFilterAbstract basicAbstractt, double indice, double varianza, int ventanas) {
