@@ -100,6 +100,34 @@ public class Metrics {
     }
     
     /*
+        Calculo de psnr
+    */
+    public double psnr() {
+        
+        double mse = 0;
+        double psnr =0;
+        double absDifference, originalPixel, resultPixel;
+
+        for (int m = 0; m < height; m++) {
+            for (int n = 0; n < width; n++) {
+                //para cada espacio de color
+                for (int i = 0; i < cLength; i++) {
+                    originalPixel = channelsOriginal[i].get(n, m);
+                    resultPixel = channelsResult[i].get(n, m);
+                    absDifference = Math.pow((Math.abs( originalPixel - resultPixel)),2);
+                    mse +=  absDifference;
+                }
+            }
+        }
+        
+        mse = mse/(double)(height*width*cLength);
+        
+        psnr = 20 * Math.log10(255/(Math.sqrt(mse)));
+        
+        return psnr;
+    }
+    
+    /*
      *  Calculo de Mean Square Error
     */
     public double mse() {
@@ -542,30 +570,17 @@ public class Metrics {
     
     @Override
     public String toString() {
-        double ncd = this.ncd();
-        double m1;
-        double m2;
-        m1 = calculateOnlySimilarityMetrics();
-        m2 = metricOfSimilarityM2();
-        
-//        double pearson = this.pearsonCorrelation();
-//        double minimumRatio = this.minimumRatio();
-//        double tanimoto = this.tanimotoMeasure();
-//        double signChange = this.stochasticSignChange();
-//        //double energy = this.energyJPD();
-//        return mae + ", " + nmse + ", " + pearson + ", " + minimumRatio + ", " + tanimoto + ", " + signChange;
-//        
+        //double ncd = this.ncd();
+        //double m1 = calculateOnlySimilarityMetrics();;
+        //double m2 = metricOfSimilarityM2();;
+              
         this.calculateMAEEuclidean();
         double mae = mae();
-        //return maeHsv[0] + ", " + maeHsv[1] + ", " + maeHsv[2] + ", " + euclideanDistance;
-//        double minkowski1 = this.minkowskiFormDistance(1);
-//        double minkowski2 = this.minkowskiFormDistance(100);
-//        return minkowski1 + ", " + minkowski2;
-        
-        
+        double psnr = psnr();
+      
         
         //return maeHsv[0] + ", " + maeHsv[1] + ", " + maeHsv[2] + ", euclideanDistance: " + euclideanDistance + ", NormalizeColorDifference: " + ncd + ", calculateOnlySimilarityMetrics: " + m1 + ", metricOfSimilarityM2: " + m2 + ", MAE: " + mae;
-        return  "euclideanDistance: " + euclideanDistance + "," + mae;
+        return  "euclideanDistance: " + euclideanDistance + ", PSNR: " + psnr + ", "+ mae;
     }
     
 }

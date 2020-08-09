@@ -77,7 +77,7 @@ public class FiltroMedianaPesosAdaptativos {
         for (Pixel sePixel : se) {
             x = p.getX() + sePixel.getX();
             y = p.getY() + sePixel.getY();
-            //verificamos si esta en la ventana del elemento estructurante
+            //verificamos si está en la ventana del elemento estructurante
             if (x > -1 && x < width && y > -1 && y < height) {
                 rgbColor = new int[cLength];
                 cantElementos = cantElementos + 1;    //para hallar la media dentro de la mascara

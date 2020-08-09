@@ -46,6 +46,7 @@ public class TestConstantsManager {
         public static class TesisRGB{
             
             public static class ConVentanas{
+                public static final String TESIS_RGB_ADAPTATIVE = "TesisRGBAdaptative";
                 public static final String TESIS_RGB_ENTROPY = "TesisRGBEntropy";
                 public static final String TESIS_RGB_MEAN = "TesisRGBMean";
                 public static final String TESIS_RGB_VARIANCE = "TesisRGBVariance";

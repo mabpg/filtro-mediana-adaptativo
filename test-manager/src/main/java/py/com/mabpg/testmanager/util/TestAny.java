@@ -20,6 +20,10 @@ public class TestAny {
         BasicFilterAbstract test;
 
         switch (filterName){
+            case TESIS_RGB_ADAPTATIVE:
+                test = new TesisRGBAdaptative(windowCount, filterType,  
+                        rgbImage, seEight);
+                break;
             case TESIS_RGB_MEAN:
                 test = new TesisRGBMean(windowCount, filterType, rgbImage, seEight);
                 break;

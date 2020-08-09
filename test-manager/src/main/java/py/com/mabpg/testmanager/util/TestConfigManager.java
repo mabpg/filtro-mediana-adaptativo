@@ -5,7 +5,7 @@ package py.com.mabpg.testmanager.util;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import static py.com.mabpg.testmanager.util.TestConstantsManager.Filters.TesisRGB.ConVentanas.TESIS_RGB_MODE2;
+import static py.com.mabpg.testmanager.util.TestConstantsManager.Filters.TesisRGB.ConVentanas.TESIS_RGB_ADAPTATIVE;
 import py.com.mabpg.testmanager.util.TestConstantsManager.Ruidos;
 
 /**
@@ -21,8 +21,8 @@ public class TestConfigManager {
     public int[] LISTA_VENTANAS = {1};
     
     public Class[] RUIDOS = {
-        //Ruidos.Gaussian.class, 
-        Ruidos.Speckle.class,
+        Ruidos.Gaussian.class, 
+        //Ruidos.Speckle.class,
         //Ruidos.Poisson.class
         //Ruidos.Impulsive.class,
         //Ruidos.Salt.class,
@@ -46,7 +46,7 @@ public class TestConfigManager {
     };
     
     public int INDEX_IMAGENES_FROM = 1;
-    public int INDEX_IMAGENES_TO = 100;
+    public int INDEX_IMAGENES_TO = 3;
            
 
     //public String BASE_PATH = "/home/jvazquez/median_filters/images/imgs/";
@@ -83,8 +83,8 @@ public class TestConfigManager {
         
         if(FILTROS == null){
             List<String> nombresFiltros = new ArrayList<>();
-            nombresFiltros.add(TESIS_RGB_MODE2);
-            //nombresFiltros.add(TESIS_RGB_MODE2_WW);
+            //nombresFiltros.add(TESIS_RGB_MODE2);
+            nombresFiltros.add(TESIS_RGB_ADAPTATIVE);
             FILTROS = nombresFiltros;
         }
     }

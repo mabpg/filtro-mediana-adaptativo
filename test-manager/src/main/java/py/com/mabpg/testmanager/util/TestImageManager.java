@@ -49,7 +49,8 @@ public class TestImageManager {
             //Escribimos la configuracion en un archivo json
             mapper.writeValue(new File("C:/Users/belis/Documents/lastOne/recursos/imagestest/logs/"+ config.NOMBRE_ARCHIVO_LOG + ".json"), config);
             
-            logger.info("#, probabilidad, nombre_metodo, compReducido, comp1, comp2, comp3, ventanas, combinacion, dimension_es, refHue, ruido, maeH, maeS, maeV, maeEuclidean, ncd, metricOfSimilarityM1, metricOfSimilarityM2, mae");
+            //Esto se coloca como encabezado al log que se genera como respuesta y que se encuentra en ...\Documents\repositorio\filtro-mediana-adaptativo\test-manager\test-manager\logs
+            logger.info("#, probabilidad, nombre_metodo, ventanas, combinacion, dimension_es, ruido, maeEuclidean, PSNR, mae");
 
             //por cada imagen original
             RgbImageJpaController rgbMgr = new RgbImageJpaController();
@@ -60,8 +61,7 @@ public class TestImageManager {
                 ColorProcessor colImgOriginal = rgbImagetTest.getColorProcessor();
                 //por cada ruido
                 for (Class noise : config.RUIDOS) {
-                    String noiseName = "";
-                    noiseName = (String) noise.getField("NAME").get(null);
+                    String noiseName = (String) noise.getField("NAME").get(null);                     
                     //obtenemos que tipo de filtro se usara para este ruido ej (min, max, median)
                     String[] tipoDeFiltros = (String[]) noise.getField("ALLOWED_FILTERS").get(null);
                     //String basePathNoisyImg = config.BASE_PATH + noiseName + config.NOISY_PATH_SUFFIX;
@@ -128,7 +128,7 @@ public class TestImageManager {
                                                 Metrics metricas = new Metrics(colImgOriginal, colImgNoiseRestored);
                                                 //logger.info(i + ", "  + ventanas[0] + "x" + ventanas[1] + ", " + noiseName + ", " + s +  ", " + nombreFiltro + ", " + combinacion + ", " + j + ", " + metricas.mae() + ", " + metricas.mse() + ", " + metricas.nmse() + ", " + TestAny.decisionValorReducido + ", " + TestAny.decisionComp[0] + ", " + TestAny.decisionComp[1] + ", " + TestAny.decisionComp[2]);
                                                 //logger.info(taskResult.get().toString() + ", "  + combinacion + ", " + j +  ", " + refHue + ", " + noiseName + ", " + metricas.toString());
-                                                logger.info(taskResult.get().toString() + ", combinacion: "  + combinacion + ", dimensionMascara: " + j +  ", noiseName: " + noiseName + ", " + metricas.toString());
+                                                logger.info(taskResult.get().toString() + ", combinacion: "  + combinacion + ", dimensionMascara: " + j +  ", " + noiseName + ", " + metricas.toString());
                                                 if(config.GUARDAR_IMAGENES){
                                                     ImagePlus imgPlus = new ImagePlus(nombreFiltro, colImgNoiseRestored);
                                                     new FileSaver(imgPlus).saveAsPng(pathRestoredMethodImg + "/" + imgName + "_" + taskResult.get().getIndice()+ "_" + taskResult.get().getVarianza() + ".jpg");

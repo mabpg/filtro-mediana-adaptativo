@@ -21,6 +21,7 @@ public class TaskResult {
     private ColorProcessor colProcessor;
     private double indice;
     private double varianza;
+    private int ventanas;
 
     public void setBasicAbstract(BasicFilterAbstract basicAbstract) {
         this.basicAbstract = basicAbstract;
@@ -49,7 +50,7 @@ public class TaskResult {
     public int getVentanas() {
         return ventanas;
     }
-    private int ventanas;
+    
 
     public TaskResult(BasicFilterAbstract basicAbstractt, double indice, double varianza, int ventanas) {
         this.indice = indice;
@@ -82,7 +83,7 @@ public class TaskResult {
             double decisionValorReducido = (double)decisionValorReducidoF.get( basicAbstract );
             double[] decisionComp = (double[])decisionCompF.get( basicAbstract );
 
-            return indice + ", " + varianza + ", " + filterName + ", " + decisionValorReducido + ", " + decisionComp[0] + ", " + decisionComp[1] + ", " + decisionComp[2] + ", " + ventanas;
+            return indice + ", " + varianza + ", " + filterName + ", " +  ventanas;
         } catch (SecurityException ex) {
             Logger.getLogger(TaskResult.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IllegalArgumentException ex) {
